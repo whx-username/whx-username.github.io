@@ -1,59 +1,37 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WebRTC 内网 Agent 控制台</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRTC 最小通信 Demo</title>
 </head>
 <body>
-  <main class="shell">
-    <header class="hero">
-      <div>
-        <p class="eyebrow">P2P LAB / MANUAL SIGNALING</p>
-        <h1>内网 Agent <span>↔</span> 公网浏览器</h1>
-        <p class="intro">不依赖公网信令服务器，手工交换 SDP 与 ICE，验证 DataChannel 双向通信。</p>
-      </div>
-      <div class="status-wrap"><span id="status-dot" class="dot"></span><span id="status">未连接</span></div>
-    </header>
+  <h1>WebRTC 内网 C++ Agent 测试</h1>
+  <p>手工交换 SDP，测试浏览器与内网 Agent 的 DataChannel 通信。</p>
 
-    <section class="steps">
-      <div class="step active"><b>01</b><span>网页创建 Offer</span></div>
-      <div class="step"><b>02</b><span>Agent 返回 Answer</span></div>
-      <div class="step"><b>03</b><span>建立 DataChannel</span></div>
-    </section>
+  <h2>1. 创建 Offer</h2>
+  <button id="create-offer">创建 Offer</button>
+  <button id="copy-offer">复制 Offer</button>
+  <p>将 Offer 完整复制到 Agent，最后输入 END。</p>
+  <textarea id="offer" rows="12" cols="100" readonly></textarea>
 
-    <section class="grid">
-      <article class="panel signal-panel">
-        <div class="panel-title"><div><span class="kicker">SIGNALING</span><h2>协商交换</h2></div><span class="pill">手工模式</span></div>
-        <div class="field">
-          <label for="offer">网页 Offer <span>浏览器生成，复制给 Agent</span></label>
-          <textarea id="offer" readonly placeholder="点击“创建 Offer”生成 SDP"></textarea>
-          <button id="create-offer" class="primary">创建 Offer</button>
-        </div>
-        <div class="field">
-          <label for="answer">Agent Answer <span>将 Agent 输出粘贴到这里</span></label>
-          <textarea id="answer" placeholder="粘贴以 v=0 开头的 SDP Answer"></textarea>
-          <button id="apply-answer">应用 Answer</button>
-        </div>
-        <div class="field split">
-          <div><label for="remote-ice">Agent ICE <span>可选</span></label><textarea id="remote-ice" placeholder='粘贴 Agent 输出的 ICE JSON'></textarea></div>
-          <div><label for="local-ice">网页 ICE <span>复制给 Agent</span></label><textarea id="local-ice" readonly placeholder="创建 Offer 后生成"></textarea></div>
-        </div>
-        <button id="copy-offer" class="ghost">复制 Offer</button>
-      </article>
+  <h2>2. 应用 Agent Answer</h2>
+  <p>将 Agent 输出的 Answer 完整粘贴到下面。</p>
+  <textarea id="answer" rows="12" cols="100" placeholder="粘贴 Agent Answer"></textarea><br>
+  <button id="apply-answer">应用 Answer</button>
 
-      <article class="panel console-panel">
-        <div class="panel-title"><div><span class="kicker">CHANNEL</span><h2>测试终端</h2></div><span id="channel-state" class="pill muted">尚未建立</span></div>
-        <div id="log" class="log" aria-live="polite"><div class="log-line dim">agent@内网:~$ 等待 WebRTC DataChannel…</div></div>
-        <div class="quick-actions"><button data-message="ping">发送 ping</button><button data-message="hello agent">发送 hello</button><button id="clear-log" class="ghost">清空日志</button></div>
-        <div class="composer"><input id="message" value="hello agent" aria-label="消息内容" /><button id="send">发送</button></div>
-        <p class="hint">连接成功后，Agent 会返回 pong，并每 3 秒发送一条模拟终端输出。</p>
-      </article>
-    </section>
+  <h2>3. 连接状态</h2>
+  <p>PeerConnection：<strong id="status">未连接</strong></p>
+  <p>DataChannel：<strong id="channel-state">未建立</strong></p>
 
-    <footer><span>仅用于实验验证 · 暂不包含屏幕捕捉和系统输入注入</span><span>WebRTC / DataChannel</span></footer>
-  </main>
+  <h2>4. 测试消息</h2>
+  <button data-message="ping">发送 ping</button>
+  <button data-message="hello agent">发送 hello</button>
+  <input id="message" value="hello agent" aria-label="消息内容">
+  <button id="send">发送</button>
+  <button id="clear-log">清空日志</button>
+  <pre id="log">等待 WebRTC DataChannel...</pre>
+
   <script src="./app.js"></script>
 </body>
 </html>
