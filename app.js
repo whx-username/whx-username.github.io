@@ -49,11 +49,19 @@ $('create-offer').onclick = async () => {
   log('Offer 已生成，请复制给 Agent');
 };
 
+function normalizeSdp(sdp) {
+  return sdp
+    .replace(/^a=end-of-candidates\s*$/gim, '')
+    .replace(/\r?\n{3,}/g, '\n\n')
+    .trim();
+}
+
 $('apply-answer').onclick = async () => {
   try {
+    const answer = normalizeSdp($('answer').value);
     await pc.setRemoteDescription({
       type: 'answer',
-      sdp: $('answer').value.trim()
+      sdp: answer
     });
     log('Answer 已应用，等待连接');
   } catch (error) {
