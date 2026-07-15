@@ -50,10 +50,7 @@ $('create-offer').onclick = async () => {
 };
 
 function normalizeSdp(sdp) {
-  return sdp
-    .replace(/^a=end-of-candidates\s*$/gim, '')
-    .replace(/\r?\n{3,}/g, '\n\n')
-    .trim();
+  return sdp.trim();
 }
 
 $('apply-answer').onclick = async () => {
